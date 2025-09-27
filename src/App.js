@@ -1,25 +1,31 @@
-import logo from './logo.svg';
+import React from 'react';
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {MantineProvider, Stack} from '@mantine/core';
+import {Notifications} from '@mantine/notifications';
 import './App.css';
 
+// Import pages
+import HomePage from "./pages/HomePage";
+import TechniciansPage from "./pages/TechniciansPage";
+
+// Import Mantine styles
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <MantineProvider>
+            <Notifications/>
+            <Router>
+                <Stack gap={0}>
+                    <Routes>
+                        <Route path={"/"} element={<HomePage/>}/>
+                        <Route path={"/technicians"} element={<TechniciansPage/>}/>
+                    </Routes>
+                </Stack>
+            </Router>
+        </MantineProvider>
+    );
 }
 
 export default App;
