@@ -24,7 +24,7 @@ function BookingPage() {
     const totalHours = (hours ?? 0) * (sessions ?? 0);
 
     const handleBooking = function (){
-        technician.ifAvailable();
+        //Todo: Handle Booking by checking Technician's availability.
     }
 
     return (
@@ -75,14 +75,16 @@ function BookingPage() {
                         />
                     </Grid.Col>
 
-                    <Select
-                        label={"Prefer Time slot "}
-                        placeholder={"Select your preferred time"}
-                        data={timeSlots}
-                        value={selectedTimeSlot}
-                        onChange={setSelectedTimeSlot}
-                        leftSection={<IconClock size={16}/>}
-                    />
+                    <Grid.Col span={12}>
+                        <Select
+                            label={"Prefer Time slot "}
+                            placeholder={"Select your preferred time"}
+                            data={timeSlots}
+                            value={selectedTimeSlot}
+                            onChange={setSelectedTimeSlot}
+                            leftSection={<IconClock size={16}/>}
+                        />
+                    </Grid.Col>
                 </Grid>
 
                 <Divider/>
@@ -93,26 +95,27 @@ function BookingPage() {
                     <Stack gap={"sm"}>
                         <Text fw={700} size={"md"}>Booking Summary</Text>
                         <Group justify="space-between">
-                            <Text size={"sm"}>Technician:</Text>
-                            <Text size={"sm"}>{technician.name}</Text>
+                            <Text size={"sm"} fw={500}>Technician:</Text>
+                            <Text size={"sm"} fw={600}>{technician.name}</Text>
                         </Group>
                         {timeSlots && (
                             <Group justify="space-between">
-                                <Text size={"sm"}>Prefer Time Slot:</Text>
-                                <Text size={"sm"}>{timeSlots.find(slot => slot.value === selectedTimeSlot)?.labelpage}</Text>
+                                <Text size={"sm"} fw={500}>Prefer Time Slot:</Text>
+                                <Text size={"sm"}>{timeSlots.find(slot => slot.value === selectedTimeSlot)?.label}</Text>
                             </Group>
                         )}
                         <Group justify="space-between">
-                            <Text size={"sm"}>Hours per session:</Text>
+                            <Text size={"sm"} fw={500}>Hours per session:</Text>
                             <Text size={"sm"}>{hours}</Text>
                         </Group>
                         <Group justify="space-between">
-                            <Text size={"sm"}>Number of session:</Text>
+                            <Text size={"sm"} fw={500}>Number of session:</Text>
                             <Text size={"sm"}>{sessions}</Text>
                         </Group>
+                        <Divider/>
                         <Group justify="space-between">
-                            <Text size={"sm"}>Total Hours:</Text>
-                            <Text size={"sm"}>{totalHours}</Text>
+                            <Text size={"sm"} fw={500}>Total Hours:</Text>
+                            <Text size={"sm"} fw={700}>{totalHours}</Text>
                         </Group>
                     </Stack>
                 </Paper>
