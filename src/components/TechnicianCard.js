@@ -6,8 +6,7 @@ import { Link } from 'react-router-dom';
 function TechnicianCard({technician, showBookBtn, isTopRated}) {
     return (
         <Card shadow="sm" padding="lg" radius={"md"} withBorder style={{
-            borderColor: isTopRated ? 'var(--mantne-color-yellow-4)' : undefined,
-            borderWidth: isTopRated ? 2 : 1
+            borderColor: isTopRated ? 'var(--mantne-color-yellow-4)' : undefined
         }}>
             <Stack gap="md">
                 <Group justify={"space-between"}>
@@ -41,7 +40,7 @@ function TechnicianCard({technician, showBookBtn, isTopRated}) {
                     <Button
                         component={Link}
                         to={"/technician/booking"}
-                        state={{technician: technician}}
+                        state={{technician: technician, isTopRated: isTopRated}}
                         fullWidth>
                         Book Now
                     </Button>}
