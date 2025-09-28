@@ -29,6 +29,24 @@ const technicians = [
         name: 'Mike Wilson',
         rating: 4.6,
         services: ['Tree Pruning', 'Hedge Trimming']
+    },
+    {
+        id: 4,
+        name: 'Emily Davis',
+        rating: 4.7,
+        services: ['Lawn Mowing', 'Fertilizing', 'Weed Control']
+    },
+    {
+        id: 5,
+        name: 'David Brown',
+        rating: 4.5,
+        services: ['Lawn Mowing', 'Leaf Removal', 'Hedge Trimming']
+    },
+    {
+        id: 6,
+        name: 'Lisa Anderson',
+        rating: 4.9,
+        services: ['Fertilizing', 'Weed Control', 'Mulching']
     }
 ];
 
@@ -77,7 +95,9 @@ function TechniciansPage() {
                     {filteredTechnicians.map(technician => (
                         <Grid.Col key={technician.id} span={{base: 12, sm: 6, lg: 4}}>
                             <TechnicianCard
-                                technician={technician}/>
+                                technician={technician}
+                                showBookBtn={true}
+                            />
                         </Grid.Col>
                     ))}
                 </Grid>

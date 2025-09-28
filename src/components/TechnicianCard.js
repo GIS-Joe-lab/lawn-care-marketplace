@@ -1,7 +1,8 @@
 import React from 'react'
 import {Badge, Button, Card, Group, Stack, Text} from "@mantine/core";
+import { Link } from 'react-router-dom';
 
-function TechnicianCard({technician}) {
+function TechnicianCard({technician, showBookBtn}) {
     return (
         <Card shadow="sm" padding="lg" radius={"md"} withBorder>
             <Stack gap="md">
@@ -23,8 +24,14 @@ function TechnicianCard({technician}) {
                     </Group>
                 </Stack>
 
-                {/*ToDo: Should navigate to another page*/}
-                <Button fullWidth>Book Now</Button>
+                {showBookBtn &&
+                    <Button
+                        component={Link}
+                        to={"/technician/booking"}
+                        state={{technician: technician}}
+                        fullWidth>
+                        Book Now
+                    </Button>}
             </Stack>
         </Card>
     );

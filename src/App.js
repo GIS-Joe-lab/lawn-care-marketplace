@@ -11,6 +11,7 @@ import TechniciansPage from "./pages/TechniciansPage";
 // Import Mantine styles
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import BookingPage from "./pages/BookingPage";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Routes>
                         <Route path={"/"} element={<HomePage/>}/>
                         <Route path={"/technicians"} element={<TechniciansPage/>}/>
+                        <Route path={"/technician/booking"} element={<BookingPage/>}/>
                     </Routes>
                 </Stack>
             </Router>
