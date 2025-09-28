@@ -1,13 +1,26 @@
 import React from 'react'
 import {Badge, Button, Card, Group, Stack, Text} from "@mantine/core";
+import {IconCrown} from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
-function TechnicianCard({technician, showBookBtn}) {
+function TechnicianCard({technician, showBookBtn, isTopRated}) {
     return (
-        <Card shadow="sm" padding="lg" radius={"md"} withBorder>
+        <Card shadow="sm" padding="lg" radius={"md"} withBorder style={{
+            borderColor: isTopRated ? 'var(--mantne-color-yellow-4)' : undefined,
+            borderWidth: isTopRated ? 2 : 1
+        }}>
             <Stack gap="md">
                 <Group justify={"space-between"}>
                     <Text size="lg" fw="700">{technician.name}</Text>
+                    {isTopRated && (
+                        <Badge
+                            color="yellow"
+                            leftSection={<IconCrown size={16} />}
+                            size="sm"
+                        >
+                            Top Rated
+                        </Badge>
+                    )}
                     <Badge color="green">
                         {technician.rating}
                     </Badge>

@@ -1,13 +1,5 @@
 import React, {useState} from "react";
-import {
-    Container,
-    Title,
-    Grid,
-    Group,
-    TextInput,
-    Select,
-    Stack
-} from '@mantine/core';
+import {Button, Container, Title, Grid, Group, Paper, TextInput, Select, Stack} from '@mantine/core';
 import {IconSearch} from '@tabler/icons-react'
 import TechnicianCard from "../components/TechnicianCard";
 
@@ -64,6 +56,19 @@ function TechniciansPage() {
         return matchesSearch && matchesService
     })
 
+    // Reset All Filter
+    const resetFilter = () => {
+        setSearchQuery('');
+        setSelectedService(null);
+    }
+
+    // Find all technician who has rating 4.8 or more and classify them as top technician
+    const topRatedTechnicians = technicians.filter(technician => technician.rating >= 4.8);
+
+    // Check if the filterTechnician object has one or more return
+    const hasTechnicians = filteredTechnicians.length > 0;
+    const hasFilter = !searchQeury && !selectedService;
+
     return (
         <Container size="xl" py="xl">
             <Stack gap="xl">
@@ -83,24 +88,45 @@ function TechniciansPage() {
                     />
 
                     <Select
-                        placeholder={"Filter by service..."}
+                        lable="Filter Service"
+                        placeholder="Filter by service..."
                         data={services}
                         value={selectedService}
                         onChange={setSelectedService}
+                        clearable
                     />
+
+                    <Button
+                        disabled={hasFilter}
+                        onClick={resetFilter}
+                        color="red"
+                        size="sm"
+                    >
+                        Clear All Filters
+                    </Button>
                 </Group>
 
                 {/*  Technicians Display body section  */}
-                <Grid>
-                    {filteredTechnicians.map(technician => (
-                        <Grid.Col key={technician.id} span={{base: 12, sm: 6, lg: 4}}>
-                            <TechnicianCard
-                                technician={technician}
-                                showBookBtn={true}
-                            />
-                        </Grid.Col>
-                    ))}
-                </Grid>
+                {hasTechnicians ?
+                    // With Technician result
+                    (<Grid>
+                        {filteredTechnicians.map(technician => (
+                            <Grid.Col key={technician.id} span={{base: 12, sm: 6, lg: 4}}>
+                                <TechnicianCard
+                                    technician={technician}
+                                    showBookBtn={true}
+                                    isTopRated={topRatedTechnicians.includes(technician)}
+                                />
+                            </Grid.Col>
+                        ))}
+                    </Grid>) :
+                    // Without Technician result
+                    (<Paper p="xl" ta="center" withBorder radius={"md"}>
+                        <Stack gap="md">
+                            <Title order={3} c={"dimmed"}>No technicians found</Title>
+                        </Stack>
+                    </Paper>)
+                }
             </Stack>
         </Container>
     );

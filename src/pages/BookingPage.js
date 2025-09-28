@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Container, Divider, Grid, Group, Paper, NumberInput, Select, Stack, Text} from '@mantine/core';
+import {Button, Card, Container, Divider, Grid, Group, Paper, NumberInput, Select, Stack, Text, Title} from '@mantine/core';
 import { Link, useLocation } from 'react-router-dom';
 import {IconArrowLeft} from '@tabler/icons-react'
 import TechnicianCard from "../components/TechnicianCard";
@@ -27,110 +27,131 @@ function BookingPage() {
         //Todo: Handle Booking by checking Technician's availability.
     }
 
-    return (
-        <Container size={"md"} py={"xl"}>
-            <Stack gap={"xl"}>
+    if (!technician )
+        return (
+            <Container size={"md"} py={"xl"}>
+                <Stack gap={"xl"}>
+                    <Card shadow="sm" padding="lg" radius={"md"} withBorder>
+                        <Title order={1} c={"red"}>No Technician Selected</Title>
+                        <Text>Please go back and select a technician first.</Text>
+                        <Button
+                            component={Link}
+                            to="/technicians"
+                            variant="outline"
+                            leftSection={<IconArrowLeft size={16} />}
+                        >
+                            Back to Technicians
+                        </Button>
+                    </Card>
+                </Stack>
+            </Container>
+        )
+    else {
+        return (
+            <Container size={"md"} py={"xl"}>
+                <Stack gap={"xl"}>
 
-                {/*Header */}
-                <Group justify="space-between" align="center">
-                    <Button
-                        component={Link}
-                        to="/technicians"
-                        variant="outline"
-                        leftSection={<IconArrowLeft size={16} />}
-                    >
-                        Back to Technicians
-                    </Button>
-                </Group>
+                    {/*Header */}
+                    <Group justify="space-between" align="center">
+                        <Button
+                            component={Link}
+                            to="/technicians"
+                            variant="outline"
+                            leftSection={<IconArrowLeft size={16} />}
+                        >
+                            Back to Technicians
+                        </Button>
+                    </Group>
 
-                {/*  Booking Main body  */}
-                {/* Technician information*/}
-                <TechnicianCard
-                    technician = {technician}
-                    showBookBtn = {false}
-                />
+                    {/*  Booking Main body  */}
+                    {/* Technician information*/}
+                    <TechnicianCard
+                        technician = {technician}
+                        showBookBtn = {false}
+                    />
 
-                {/*  Booking Panel  */}
-                <Grid>
-                    <Grid.Col span={6}>
-                        <NumberInput
-                            label={"Hours per session"}
-                            value={hours}
-                            onChange={setHours}
-                            min={1}
-                            max={8}
-                            step={0.5}
-                            leftSection={<IconClock size={16}/>}
-                        />
-                    </Grid.Col>
+                    {/*  Booking Panel  */}
+                    <Grid>
+                        <Grid.Col span={6}>
+                            <NumberInput
+                                label={"Hours per session"}
+                                value={hours}
+                                onChange={setHours}
+                                min={1}
+                                max={8}
+                                step={0.5}
+                                leftSection={<IconClock size={16}/>}
+                            />
+                        </Grid.Col>
 
-                    <Grid.Col span={6}>
-                        <NumberInput
-                            label={"Number of Sessions"}
-                            value={sessions}
-                            onChange={setSessions}
-                            min={1}
-                            max={10}
-                            leftSection={<IconCalendar size={16}/>}
-                        />
-                    </Grid.Col>
+                        <Grid.Col span={6}>
+                            <NumberInput
+                                label={"Number of Sessions"}
+                                value={sessions}
+                                onChange={setSessions}
+                                min={1}
+                                max={10}
+                                leftSection={<IconCalendar size={16}/>}
+                            />
+                        </Grid.Col>
 
-                    <Grid.Col span={12}>
-                        <Select
-                            label={"Prefer Time slot "}
-                            placeholder={"Select your preferred time"}
-                            data={timeSlots}
-                            value={selectedTimeSlot}
-                            onChange={setSelectedTimeSlot}
-                            leftSection={<IconClock size={16}/>}
-                        />
-                    </Grid.Col>
-                </Grid>
+                        <Grid.Col span={12}>
+                            <Select
+                                label={"Prefer Time slot "}
+                                placeholder={"Select your preferred time"}
+                                data={timeSlots}
+                                value={selectedTimeSlot}
+                                onChange={setSelectedTimeSlot}
+                                leftSection={<IconClock size={16}/>}
+                            />
+                        </Grid.Col>
+                    </Grid>
 
-                <Divider/>
+                    <Divider/>
 
-                {/* Booking Summary Page */}
+                    {/* Booking Summary Page */}
 
-                <Paper>
-                    <Stack gap={"sm"}>
-                        <Text fw={700} size={"md"}>Booking Summary</Text>
-                        <Group justify="space-between">
-                            <Text size={"sm"} fw={500}>Technician:</Text>
-                            <Text size={"sm"} fw={600}>{technician.name}</Text>
-                        </Group>
-                        {timeSlots && (
+                    <Paper>
+                        <Stack gap={"sm"}>
+                            <Text fw={700} size={"md"}>Booking Summary</Text>
                             <Group justify="space-between">
-                                <Text size={"sm"} fw={500}>Prefer Time Slot:</Text>
-                                <Text size={"sm"}>{timeSlots.find(slot => slot.value === selectedTimeSlot)?.label}</Text>
+                                <Text size={"sm"} fw={500}>Technician:</Text>
+                                <Text size={"sm"} fw={600}>{technician.name}</Text>
                             </Group>
-                        )}
-                        <Group justify="space-between">
-                            <Text size={"sm"} fw={500}>Hours per session:</Text>
-                            <Text size={"sm"}>{hours}</Text>
-                        </Group>
-                        <Group justify="space-between">
-                            <Text size={"sm"} fw={500}>Number of session:</Text>
-                            <Text size={"sm"}>{sessions}</Text>
-                        </Group>
-                        <Divider/>
-                        <Group justify="space-between">
-                            <Text size={"sm"} fw={500}>Total Hours:</Text>
-                            <Text size={"sm"} fw={700}>{totalHours}</Text>
-                        </Group>
-                    </Stack>
-                </Paper>
-                {/* Booking Page Footer*/}
-                <Button
-                    fullWidth
-                    disabled={!hours || !sessions || !selectedTimeSlot}
-                    onClick={handleBooking}
-                    leftSection={<IconCalendar size={16}/>}
-                >
-                    Confirm Booking
-                </Button>
-            </Stack>
-        </Container>
-    );
+                            {timeSlots && (
+                                <Group justify="space-between">
+                                    <Text size={"sm"} fw={500}>Prefer Time Slot:</Text>
+                                    <Text size={"sm"}>{timeSlots.find(slot => slot.value === selectedTimeSlot)?.label}</Text>
+                                </Group>
+                            )}
+                            <Group justify="space-between">
+                                <Text size={"sm"} fw={500}>Hours per session:</Text>
+                                <Text size={"sm"}>{hours}</Text>
+                            </Group>
+                            <Group justify="space-between">
+                                <Text size={"sm"} fw={500}>Number of session:</Text>
+                                <Text size={"sm"}>{sessions}</Text>
+                            </Group>
+                            <Divider/>
+                            <Group justify="space-between">
+                                <Text size={"sm"} fw={500}>Total Hours:</Text>
+                                <Text size={"sm"} fw={700}>{totalHours}</Text>
+                            </Group>
+                        </Stack>
+                    </Paper>
+                    {/* Booking Page Footer*/}
+                    <Button
+                        fullWidth
+                        disabled={!hours || !sessions || !selectedTimeSlot}
+                        onClick={handleBooking}
+                        leftSection={<IconCalendar size={16}/>}
+                    >
+                        Confirm Booking
+                    </Button>
+                </Stack>
+            </Container>
+        );
+    }
 }
 
 export default BookingPage;
