@@ -4,7 +4,7 @@ import {TIME_SLOTS} from "../constants/timeSlots";
 
 function BookingSummary ({technicianName, selectedTimeSlot, hours, sessions}) {
 
-    const totalHours = (hours * sessions) | 0;
+    const totalHours = hours * sessions;
 
     return (
         <Paper>

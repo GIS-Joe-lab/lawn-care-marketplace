@@ -18,7 +18,7 @@ function TechniciansPage() {
 
     // Filter Technicians
     const filteredTechnicians = Technicians.filter(technicians => {
-        const matchesSearch = technicians.name.toLocaleLowerCase().includes(searchQuery.toLowerCase());
+        const matchesSearch = technicians.name.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesService = !selectedService || technicians.services.includes(selectedService);
         return matchesSearch && matchesService && technicians.rating >= selectedMinRating
     })

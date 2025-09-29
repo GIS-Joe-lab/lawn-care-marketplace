@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {TIME_SLOTS} from "../constants/timeSlots";
-import {Button, Card, Divider, Grid, NumberInput, Select, Stack} from "@mantine/core";
+import {Button, Card, Divider, Grid, NumberInput, Select, Stack, Text} from "@mantine/core";
 import {IconClock, IconCalendar} from "@tabler/icons-react";
 import BookingSummary from "./BookingSummary";
 
@@ -13,7 +13,7 @@ function BookingForm ({technician, onSubmit}) {
     const totalHours = (hours ?? 0) * (sessions ?? 0);
 
     const handleSubmit = () => {
-        const formData = {hours, sessions, totalHours};
+        const formData = {hours, sessions, selectedTimeSlot, totalHours};
         onSubmit(formData);
     }
 
@@ -31,6 +31,7 @@ function BookingForm ({technician, onSubmit}) {
                             step={0.5}
                             leftSection={<IconClock size={16}/>}
                         />
+                        <Text mt={4} size="sm" c={"dimmed"} >Maximum 10 hour per session</Text>
                     </Grid.Col>
 
                     <Grid.Col span={6}>
@@ -42,6 +43,7 @@ function BookingForm ({technician, onSubmit}) {
                             max={10}
                             leftSection={<IconCalendar size={16}/>}
                         />
+                        <Text mt={4} size="sm" c={"dimmed"} >Maximum 10 the session</Text>
                     </Grid.Col>
 
                     <Grid.Col span={12}>
