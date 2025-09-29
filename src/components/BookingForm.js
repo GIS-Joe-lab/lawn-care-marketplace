@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {TIME_SLOTS} from "../constants/timeSlots";
-import {Button, Card, Divider, Grid, Group, NumberInput, Paper, Select, Stack, Text} from "@mantine/core";
+import {Button, Card, Divider, Grid, NumberInput, Select, Stack} from "@mantine/core";
 import {IconClock, IconCalendar} from "@tabler/icons-react";
 import BookingSummary from "./BookingSummary";
 

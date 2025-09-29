@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Container, Title, Grid, Group, Paper, TextInput, Select, Stack} from '@mantine/core';
+import {Button, Container, Title, Grid, TextInput, Select, Slider, Stack} from '@mantine/core';
 import {IconSearch} from '@tabler/icons-react'
 import TechnicianCard from "../components/TechnicianCard";
 import {Technicians} from "../constants/technicians";
@@ -7,31 +7,32 @@ import NoTechnician from "../components/NoTechnician";
 
 function TechniciansPage() {
 
+    const minRating = Math.min(...Technicians.map(t => t.rating))
+    const maxRating = Math.max(...Technicians.map(t => t.rating))
+    const services = [...new Set(Technicians.flatMap(technician => technician.services))].sort();
+    const topRatedTechnicians = Technicians.filter(technician => technician.rating >= 4.8);
+
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedService, setSelectedService] = useState('');
-
-    const services = ['Lawn Mowing', 'Hedge Trimming', 'Fertilizing', 'Weed Control', 'Tree Pruning'];
+    const [selectedMinRating, setSelectedMinRating] = useState(minRating);
 
     // Filter Technicians
     const filteredTechnicians = Technicians.filter(technicians => {
         const matchesSearch = technicians.name.toLocaleLowerCase().includes(searchQuery.toLowerCase());
         const matchesService = !selectedService || technicians.services.includes(selectedService);
-        return matchesSearch && matchesService
+        return matchesSearch && matchesService && technicians.rating >= selectedMinRating
     })
+
+    // Check if the filterTechnician object has one or more return
+    const hasTechnicians = filteredTechnicians.length > 0;
+    const hasNoFilter = !searchQuery && !selectedService && selectedMinRating === minRating;
 
     // Reset All Filter
     const resetFilters = () => {
         setSearchQuery('');
         setSelectedService(null);
+        setSelectedMinRating(minRating)
     }
-
-    // Find all technician who has rating 4.8 or more and classify them as top technician
-    const topRatedTechnicians = Technicians.filter(technician => technician.rating >= 4.8);
-
-    // Check if the filterTechnician object has one or more return
-    const hasTechnicians = filteredTechnicians.length > 0;
-    const hasNoFilter = !searchQuery && !selectedService;
-
     return (
         <Container size="xl" py="xl">
             <Stack gap="xl">
@@ -42,31 +43,50 @@ function TechniciansPage() {
                 </Title>
 
                 {/* Search and Filter section*/}
-                <Group grow>
-                    <TextInput
-                        placeholder="Search by name..."
-                        leftSection={<IconSearch size={16}/>}
-                        value={searchQuery}
-                        onChange={(event) => setSearchQuery(event.currentTarget.value)}
-                    />
-
-                    <Select
-                        placeholder="Filter by service..."
-                        data={services}
-                        value={selectedService}
-                        onChange={setSelectedService}
-                        clearable
-                    />
-
-                    <Button
-                        disabled={hasNoFilter}
-                        onClick={resetFilters}
-                        color="red"
-                        size="sm"
-                    >
-                        Clear All Filters
-                    </Button>
-                </Group>
+                <Grid>
+                    <Grid.Col span={3}>
+                        <TextInput
+                            placeholder="Search by name..."
+                            leftSection={<IconSearch size={16}/>}
+                            value={searchQuery}
+                            onChange={(event) => setSearchQuery(event.currentTarget.value)}
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+                        <Select
+                            placeholder="Filter by service..."
+                            data={services}
+                            value={selectedService}
+                            onChange={setSelectedService}
+                            clearable
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+                        <Slider
+                            label={`Minimum Rating ${selectedMinRating.toFixed(1)}`}
+                            color={"green"}
+                            value={selectedMinRating}
+                            onChange={setSelectedMinRating}
+                            min={minRating}
+                            max={maxRating}
+                            step={0.1}
+                            marks={[
+                                {value: minRating, label:minRating.toString()},
+                                {value: maxRating, label:maxRating.toString()}
+                            ]}
+                            />
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+                        <Button
+                            disabled={hasNoFilter}
+                            onClick={resetFilters}
+                            color="red"
+                            size="sm"
+                        >
+                            Clear All Filters
+                        </Button>
+                    </Grid.Col>
+                </Grid>
 
                 {/*  Technicians Display body section  */}
                 {hasTechnicians ?

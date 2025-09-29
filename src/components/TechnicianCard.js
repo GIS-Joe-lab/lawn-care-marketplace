@@ -5,9 +5,7 @@ import { Link } from 'react-router-dom';
 
 function TechnicianCard({technician, showBookBtn, isTopRated}) {
     return (
-        <Card shadow="sm" padding="lg" radius={"md"} withBorder style={{
-            borderColor: isTopRated ? 'var(--mantne-color-yellow-4)' : undefined
-        }}>
+        <Card shadow="sm" padding="lg" radius={"md"} withBorder>
             <Stack gap="md">
                 <Group justify={"space-between"}>
                     <Text size="lg" fw="700">{technician.name}</Text>
