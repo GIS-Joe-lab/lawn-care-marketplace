@@ -17,6 +17,8 @@ const initialState = {
         totalHours: 0
     },
 
+    bookedAppointments: [],
+
     isLoading: false,
     error: null
 };
@@ -31,6 +33,13 @@ export const ACTIONS = {
     // Booking actions
     SET_SELECTED_TECHNICIAN: 'SET_SELECTED_TECHNICIAN',
     UPDATE_BOOKING_DATA: 'UPDATE_BOOKING_DATA',
+    RESET_BOOKING: 'RESET_BOOKING',
+
+    // Actions for booked appointment
+    ADD_BOOKED_APPOINTMENT: 'ADD_BOOKED_APPOINTMENT',
+    UPDATE_BOOKED_APPOINTMENT: 'UPDATE_BOOKED_APPOINTMENT',
+    DELETE_BOOKED_APPOINTMENT: 'DELETE_BOOKED_APPOINTMENT',
+    CLEAR_BOOKED_APPOINTMENTS: 'CLEAR_BOOKED_APPOINTMENTS',
 
     SET_LOADING: 'SET_LOADING',
     SET_ERROR: 'SET_ERROR',
@@ -76,6 +85,40 @@ function appReducer(state, action) {
 
         case ACTIONS.CLEAR_ERROR:
             return {...state, error: null};
+
+        case ACTIONS.ADD_BOOKED_APPOINTMENT:
+            return {...state, bookedAppointments: [...state.bookedAppointments, action.payload]};
+
+        case ACTIONS.UPDATE_BOOKED_APPOINTMENT:
+            return {...state, bookedAppointments: state.bookedAppointments.map(appointment =>
+                    appointment.id === action.payload.id
+                            ? { ...appointment, ...action.payload.updates }
+                            : appointment
+                )};
+
+        case ACTIONS.DELETE_BOOKED_APPOINTMENT:
+            return {...state, bookedAppointments: state.bookedAppointments.filter(
+                    appointment => appointment.id !== action.payload
+                )};
+
+        case ACTIONS.RESET_BOOKING:
+            return {
+                ...state,
+                selectedTechnician: null,
+                isTopRated: false,
+                bookingData: {
+                    hours: null,
+                    sessions: null,
+                    selectedTimeSlot: null,
+                    totalHours: 0
+                }
+            };
+
+        case ACTIONS.CLEAR_BOOKED_APPOINTMENTS:
+            return {
+                ...state,
+                bookedAppointments: []
+            };
 
         default:
             return state;

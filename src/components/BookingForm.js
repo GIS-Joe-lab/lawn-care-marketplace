@@ -1,41 +1,47 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {TIME_SLOTS} from "../constants/timeSlots";
-import {Button, Card, Divider, Grid, NumberInput, Select, Stack, Text} from "@mantine/core";
+import {Alert, Button, Card, Divider, Grid, NumberInput, Select, Stack, Text} from "@mantine/core";
 import {IconClock, IconCalendar} from "@tabler/icons-react";
 import BookingSummary from "./BookingSummary";
 import {useBooking} from "../hooks/useBooking";
 
-function BookingForm({technician, onSubmit}) {
+function BookingForm({technician, onSubmit, onCancel, isEditing = false}) {
 
-    const {updateBookingData} = useBooking();
+    const {bookingData, updateBookingData} = useBooking();
 
-    const [hours, setHours] = useState();
-    const [sessions, setSessions] = useState();
-    const [selectedTimeSlot, setSelectedTimeSlot] = useState();
+    const canBook = bookingData.hours && bookingData.sessions && bookingData.selectedTimeSlot;
+
+    const hours = bookingData.hours || '';
+    const sessions = bookingData.sessions || '';
+    const selectedTimeSlot = bookingData.selectedTimeSlot || '';
 
     const totalHours = (hours || 0) * (sessions || 0);
-    const canBook = hours && sessions && selectedTimeSlot;
 
     const handleSubmit = () => {
-        updateBookingData({
-            hours,
-            sessions,
-            selectedTimeSlot
-        });
-
         const formData = {hours, sessions, selectedTimeSlot, totalHours};
         onSubmit(formData);
+    }
+
+    const handleCancelAppointment = () => {
+        onCancel();
     }
 
     return (
         <Card shadow="sm" padding="lg" radius={"md"} withBorder>
             <Stack gap={"xl"}>
+                {/* Show editing indicator */}
+                {isEditing && (
+                    <Alert color="blue" title="Editing Existing Appointment">
+                        You are editing an existing appointment. Changes will update the current booking.
+                    </Alert>
+                )}
+
                 <Grid>
                     <Grid.Col span={6}>
                         <NumberInput
                             label={"Hours per session"}
                             value={hours}
-                            onChange={setHours}
+                            onChange={(value) => updateBookingData({hours: value})}
                             min={1}
                             max={10}
                             step={0.5}
@@ -48,7 +54,7 @@ function BookingForm({technician, onSubmit}) {
                         <NumberInput
                             label={"Number of Sessions"}
                             value={sessions}
-                            onChange={setSessions}
+                            onChange={(value) => updateBookingData({sessions: value})}
                             min={1}
                             max={10}
                             leftSection={<IconCalendar size={16}/>}
@@ -62,7 +68,7 @@ function BookingForm({technician, onSubmit}) {
                             placeholder={"Select your preferred time"}
                             data={TIME_SLOTS}
                             value={selectedTimeSlot}
-                            onChange={setSelectedTimeSlot}
+                            onChange={(value) => updateBookingData({selectedTimeSlot: value})}
                             leftSection={<IconClock size={16}/>}
                         />
                     </Grid.Col>
@@ -85,8 +91,14 @@ function BookingForm({technician, onSubmit}) {
                     onClick={handleSubmit}
                     leftSection={<IconCalendar size={16}/>}
                 >
-                    Confirm Booking
+                    {isEditing ? "Update Appointment" : "Confirm Booking"}
                 </Button>
+                {isEditing && (
+                    <Button
+                        fullWidth
+                        onClick={handleCancelAppointment}
+                    >Cancel Appointment</Button>
+                )}
             </Stack>
         </Card>
     );

@@ -1,9 +1,10 @@
 import React from "react";
 import {Button, Container, Title, Grid, TextInput, Select, Slider, Stack} from '@mantine/core';
-import {IconSearch} from '@tabler/icons-react'
+import {IconHome, IconSearch} from '@tabler/icons-react'
 import TechnicianCard from "../components/TechnicianCard";
 import NoTechnician from "../components/NoTechnician";
 import {useTechnician} from "../hooks/useTechnician";
+import {Link} from "react-router-dom";
 
 function TechniciansPage() {
     const {
@@ -27,13 +28,18 @@ function TechniciansPage() {
         <Container size="xl" py="xl">
             <Stack gap="xl">
 
-                {/* Header section*/}
-                <Title order={1} c="green">
-                    Our Lawn Care Technicians
-                </Title>
-
                 {/* Search and Filter section*/}
                 <Grid>
+                    <Grid.Col span={1}>
+                        <Button
+                            component={Link}
+                            variant="subtle"
+                            size={"sm"}
+                            to={"/"}
+                        >
+                            <IconHome size={32}/>
+                        </Button>
+                    </Grid.Col>
                     <Grid.Col span={3}>
                         <TextInput
                             placeholder="Search by name..."
@@ -51,7 +57,7 @@ function TechniciansPage() {
                             clearable
                         />
                     </Grid.Col>
-                    <Grid.Col span={3}>
+                    <Grid.Col span={2}>
                         <Slider
                             label={`Minimum Rating ${selectedMinRating.toFixed(1)}`}
                             color={"green"}

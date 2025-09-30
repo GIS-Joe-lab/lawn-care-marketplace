@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Alert, Button, Container, Group, Stack} from '@mantine/core';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {IconArrowLeft, IconInfoCircle, IconCheck, IconAlertCircle} from '@tabler/icons-react'
 import TechnicianCard from "../components/TechnicianCard";
 import BookingForm from "../components/BookingForm";
@@ -9,36 +9,73 @@ import {useBooking} from "../hooks/useBooking";
 
 function BookingPage() {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const {
-        selectedTechnician,
-        isTopRated,
+        selectedTechnician: contextTechnician,
+        isTopRated: contextIsTopRated,
         isLoading,
         error,
-        updateBookingData
+        updateBookingData,
+        resetBooking,
+        saveBookedAppointment,
+        updateBookedAppointment
     } = useBooking();
 
     const [bookingSuccess, setBookingSuccess] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingAppointment, setEditingAppointment] = useState(null);
+
+    // Check if we're editing an existing appointment
+    useEffect(() => {
+        if (location.state?.isEditing && location.state?.editingAppointment) {
+            setIsEditing(true);
+            setEditingAppointment(location.state.editingAppointment);
+            
+            // Pre-populate booking data with existing appointment
+            updateBookingData({
+                hours: location.state.editingAppointment.hours,
+                sessions: location.state.editingAppointment.sessions,
+                selectedTimeSlot: location.state.editingAppointment.selectedTimeSlot
+            });
+        }
+    }, [location.state, updateBookingData]);
+
+    // Get technician from either Context or location state
+    const technician = contextTechnician || location.state?.technician || location.state?.editingAppointment?.technician;
+    const technicianIsTopRated = contextIsTopRated || location.state?.isTopRated || location.state?.editingAppointment?.isTopRated;
 
     const handleBookingSubmit = (formData) => {
-
         updateBookingData({
             hours: formData.hours,
             sessions: formData.sessions,
             selectedTimeSlot: formData.selectedTimeSlot
         });
 
-        if(formData.totalHours < 10) {
-            setBookingSuccess(true);
-
-            // Auto Navigate back to technician page after 3 seconds
-            setTimeout(() => {
-                navigate('/technicians');
-            }, 3000)
+        if (isEditing && editingAppointment) {
+            // Update existing appointment
+            updateBookedAppointment(editingAppointment.id, {
+                hours: formData.hours,
+                sessions: formData.sessions,
+                selectedTimeSlot: formData.selectedTimeSlot,
+                totalHours: formData.totalHours,
+                status: 'confirmed' // Reset to confirmed when updated
+            });
+        } else {
+            // Create new appointment
+            saveBookedAppointment(formData);
         }
+
+        setBookingSuccess(true);
+
+        // Auto Navigate back to home page after 3 seconds
+        setTimeout(() => {
+            resetBooking();
+            navigate('/');
+        }, 3000)
     }
 
-    if (!selectedTechnician )
+    if (!technician) {
         return (
             <Container size={"md"} py={"xl"}>
                 <Stack gap={"xl"}>
@@ -49,7 +86,7 @@ function BookingPage() {
                 </Stack>
             </Container>
         )
-    else {
+    } else {
         return (
             <Container size={"md"} py={"xl"}>
                 <Stack gap={"xl"}>
@@ -57,24 +94,30 @@ function BookingPage() {
                     <Group justify="space-between" align="center">
                         <Button
                             component={Link}
-                            to="/technicians"
+                            to="/"
                             variant="outline"
                             leftSection={<IconArrowLeft size={16} />}
+                            onClick={() => resetBooking()}
                         >
-                            Back to Technicians
+                            Back to Home
                         </Button>
                     </Group>
 
+                    {/* Success Message */}
                     {bookingSuccess && (
                         <Alert
                             color="green"
                             icon={<IconCheck size={16}/>}
-                            title="Booking Successful!"
+                            title={isEditing ? "Appointment Updated!" : "Booking Successful!"}
                         >
-                            Your booking has been confirmed. Redirecting to technicians page in 3 seconds...
+                            {isEditing ? 
+                                "Your appointment has been updated successfully!" : 
+                                "Your booking has been confirmed. Thank you for choosing our service!"
+                            } Redirecting to home page in 3 seconds...
                         </Alert>
                     )}
 
+                    {/* Loading and Error States */}
                     {isLoading && (
                         <Group>
                             <Alert icon={<IconInfoCircle size={16}/>}>
@@ -91,18 +134,18 @@ function BookingPage() {
                         </Group>
                     )}
 
-                    {/*  Booking Main body  */}
-                    {/* Technician information*/}
+                    {/* Technician Information */}
                     <TechnicianCard
-                        technician = {selectedTechnician}
+                        technician = {technician}
                         showBookBtn = {false}
-                        isTopRated = {isTopRated}
+                        isTopRated = {technicianIsTopRated}
                     />
 
-                    {/*  Booking Panel  */}
+                    {/* Booking Form */}
                     <BookingForm
-                        technician = {selectedTechnician}
+                        technician = {technician}
                         onSubmit = {handleBookingSubmit}
+                        isEditing={isEditing}
                     />
                 </Stack>
             </Container>
