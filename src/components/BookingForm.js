@@ -3,22 +3,32 @@ import {TIME_SLOTS} from "../constants/timeSlots";
 import {Button, Card, Divider, Grid, NumberInput, Select, Stack, Text} from "@mantine/core";
 import {IconClock, IconCalendar} from "@tabler/icons-react";
 import BookingSummary from "./BookingSummary";
+import {useBooking} from "../hooks/useBooking";
 
-function BookingForm ({technician, onSubmit}) {
+function BookingForm({technician, onSubmit}) {
+
+    const {updateBookingData} = useBooking();
 
     const [hours, setHours] = useState();
     const [sessions, setSessions] = useState();
     const [selectedTimeSlot, setSelectedTimeSlot] = useState();
 
-    const totalHours = (hours ?? 0) * (sessions ?? 0);
+    const totalHours = (hours || 0) * (sessions || 0);
+    const canBook = hours && sessions && selectedTimeSlot;
 
     const handleSubmit = () => {
+        updateBookingData({
+            hours,
+            sessions,
+            selectedTimeSlot
+        });
+
         const formData = {hours, sessions, selectedTimeSlot, totalHours};
         onSubmit(formData);
     }
 
     return (
-        <Card shadow="sm" padding="lg" radius={"md"} withBorder >
+        <Card shadow="sm" padding="lg" radius={"md"} withBorder>
             <Stack gap={"xl"}>
                 <Grid>
                     <Grid.Col span={6}>
@@ -31,7 +41,7 @@ function BookingForm ({technician, onSubmit}) {
                             step={0.5}
                             leftSection={<IconClock size={16}/>}
                         />
-                        <Text mt={4} size="sm" c={"dimmed"} >Maximum 10 hour per session</Text>
+                        <Text mt={4} size="sm" c={"dimmed"}>Maximum 10 hours per session</Text>
                     </Grid.Col>
 
                     <Grid.Col span={6}>
@@ -43,7 +53,7 @@ function BookingForm ({technician, onSubmit}) {
                             max={10}
                             leftSection={<IconCalendar size={16}/>}
                         />
-                        <Text mt={4} size="sm" c={"dimmed"} >Maximum 10 the session</Text>
+                        <Text mt={4} size="sm" c={"dimmed"}>Maximum 10 sessions</Text>
                     </Grid.Col>
 
                     <Grid.Col span={12}>
@@ -61,7 +71,7 @@ function BookingForm ({technician, onSubmit}) {
                 <Divider/>
 
                 {/* Booking Summary */}
-                {hours && sessions && selectedTimeSlot && <BookingSummary
+                {canBook && <BookingSummary
                     technician={technician.name}
                     selectedTimeSlot={selectedTimeSlot}
                     hours={hours}
@@ -71,7 +81,7 @@ function BookingForm ({technician, onSubmit}) {
                 {/* Booking Page Footer*/}
                 <Button
                     fullWidth
-                    disabled={!hours || !sessions || !selectedTimeSlot}
+                    disabled={!canBook}
                     onClick={handleSubmit}
                     leftSection={<IconCalendar size={16}/>}
                 >

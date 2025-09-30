@@ -1,70 +1,210 @@
-# Getting Started with Create React App
+# Lawn Care Marketplace
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React application for finding and booking lawn care technicians. Built with React, Mantine UI, and React Router v7.
 
-## Available Scripts
+## Installation & Setup
 
-In the project directory, you can run:
+### Prerequisites
+- Node.js (version 14 or higher) https://nodejs.org/en/download
+- npm or yarn package manager
 
-### `npm start`
+### Installation Steps
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/GIS-Joe-lab/lawn-care-marketplace.git
+   cd lawn-care-marketplace
+   ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-### `npm test`
+3. **Start the development server**
+   ```bash
+   npm start
+   ```
+   Notice: This could take up to 10 seconds for initial start.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+4. **Open your browser**
+   Navigate to `http://localhost:3000`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Design & Implementation Decisions
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Component Architecture
+**Decision**: Created reusable components for consistency and maintainability
+- `TechnicianCard`: Used in both listing and booking pages
+- `NoTechnician`: Handles empty states across multiple pages
+- `BookingSummary`: Extracted for real-time updates
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Rationale**: Follows DRY principles and ensures consistent UI patterns
 
-### `npm run eject`
+### State Management
+**Decision**: Used local component state with `useState` hooks
+- Form state managed within `BookingForm` component
+- Filter state managed within `TechniciansPage`
+- Navigation state passed via React Router
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**Rationale**: Simple state requirements don't warrant complex state management solutions
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Data Structure
+**Decision**: Mock data stored in separate constants files
+- `technicians.js`: Contains technician data with ratings and services
+- `timeSlots.js`: Defines available booking time slots
+- Dynamic service extraction from technician data
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**Rationale**: Separates data from components, making it easy to replace with API calls later
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### UI/UX Decisions
+**Decision**: Implemented responsive grid system with Mantine
+- Mobile: Single column layout
+- Tablet: Two-column grid  
+- Desktop: Three-column grid
 
-## Learn More
+**Decision**: Added interactive filtering with real-time updates
+- Search by name with `toLowerCase()` normalization
+- Service filtering with dynamic dropdown
+- Rating slider with min/max constraints
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**Decision**: Top-rated technician highlighting (≥4.8 rating)
+- Visual distinction with crown badge
+- Helps users identify premium services
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Form Validation
+**Decision**: Client-side validation with disabled states
+- All form fields required before submission
+- Number inputs with min/max constraints
+- Real-time summary updates
 
-### Code Splitting
+**Decision**: Automatic navigation after successful booking
+- 3-second delay with `setTimeout()`
+- Provides user feedback before redirect
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Project Structure
 
-### Analyzing the Bundle Size
+```
+src/
+├── components/
+│   ├── TechnicianCard.js      # Reusable technician display card
+│   ├── BookingForm.js         # Booking form with validation
+│   ├── BookingSummary.js      # Real-time booking summary
+│   └── NoTechnician.js        # Empty state component
+├── pages/
+│   ├── HomePage.js            # Landing page
+│   ├── TechniciansPage.js     # Technician listing and filtering
+│   └── BookingPage.js         # Booking interface
+├── constants/
+│   ├── technicians.js         # Mock technician data
+│   └── timeSlots.js           # Available time slot options
+└── App.js                     # Main application component
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Tech Stack
 
-### Making a Progressive Web App
+- **Frontend**: React 19.1.1
+- **UI Library**: Mantine 8.3.2
+- **Routing**: React Router v7.9.3
+- **Icons**: Tabler Icons 3.35.0
+- **Build Tool**: Create React App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## UI Features
 
-### Advanced Configuration
+- **Responsive Grid**: Adapts to different screen sizes
+- **Interactive Sliders**: Smooth rating filtering
+- **Real-time Search**: Instant results as you type
+- **Conditional Rendering**: Dynamic UI based on state
+- **Loading States**: Smooth user feedback
+- **Error Handling**: Graceful error states
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Responsive Design
 
-### Deployment
+- **Mobile**: Single column layout
+- **Tablet**: Two-column grid
+- **Desktop**: Three-column grid
+- **Large Screens**: Optimized spacing and layout
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Performance Features
 
-### `npm run build` fails to minify
+- **Component Reusability**: DRY principle implementation
+- **Efficient Filtering**: Optimized search algorithms
+- **State Management**: Clean React state patterns
+- **Memory Optimization**: Proper component lifecycle
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Bonus Features & Advanced Patterns
+
+### Advanced React Patterns Implemented
+
+**1. Component Composition**
+- Extracted `BookingSummary` as a separate component for better separation of concerns
+- Used props drilling effectively for data flow between parent and child components
+
+**2. Conditional Rendering Patterns**
+- Implemented multiple conditional rendering strategies:
+  - `&&` operator for top-rated badges
+  - Ternary operator for technician list vs. empty state
+  - Early returns for error states
+
+**3. Dynamic Data Processing**
+- Dynamic service extraction using `Set`, `flatMap`, and `sort`
+- Computed values for filtering and validation
+- Real-time calculations for booking summaries
+
+**4. State Management Patterns**
+- Local state with `useState` hooks
+- Computed state values (derived from other state)
+- State reset functionality for form clearing
+
+**5. Event Handling Patterns**
+- Controlled components with `onChange` handlers
+- Form submission with validation
+- Navigation state passing via React Router
+
+### Performance Optimizations
+
+**1. Efficient Filtering**
+- Single-pass filtering algorithm
+- Optimized search with `toLowerCase()` normalization
+- Dynamic service list generation
+
+**2. Component Reusability**
+- `TechnicianCard` used in multiple contexts
+- `NoTechnician` handles different empty states
+- Consistent prop interfaces across components
+
+**3. User Experience Enhancements**
+- Real-time form validation
+- Automatic navigation with user feedback
+- Responsive design with Mantine's grid system
+- Loading states and error handling
+
+### Code Quality Features
+
+**1. Clean Architecture**
+- Separation of concerns (components, pages, constants)
+- Single responsibility principle
+- DRY (Don't Repeat Yourself) implementation
+
+**2. Maintainable Code**
+- Clear component naming conventions
+- Consistent file structure
+- Well-documented prop interfaces
+
+**3. Error Handling**
+- Graceful empty states
+- Form validation with user feedback
+- Navigation error handling
+
+## Future Enhancements
+
+- [ ] User authentication system
+- [ ] Real-time booking notifications
+- [ ] Payment integration
+- [ ] Technician reviews and ratings
+- [ ] Calendar integration
+- [ ] Email notifications
+- [ ] Admin dashboard
+- [ ] Mobile app version
+
+---

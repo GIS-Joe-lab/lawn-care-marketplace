@@ -7,25 +7,29 @@ import './App.css';
 // Import pages
 import HomePage from "./pages/HomePage";
 import TechniciansPage from "./pages/TechniciansPage";
+import BookingPage from "./pages/BookingPage";
 
 // Import Mantine styles
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
-import BookingPage from "./pages/BookingPage";
+import {AppProvider} from "./context/AppContext";
+
 
 function App() {
     return (
         <MantineProvider>
             <Notifications/>
-            <Router>
-                <Stack gap={0}>
-                    <Routes>
-                        <Route path={"/"} element={<HomePage/>}/>
-                        <Route path={"/technicians"} element={<TechniciansPage/>}/>
-                        <Route path={"/technician/booking"} element={<BookingPage/>}/>
-                    </Routes>
-                </Stack>
-            </Router>
+            <AppProvider>
+                <Router>
+                    <Stack gap={0}>
+                        <Routes>
+                            <Route path={"/"} element={<HomePage/>}/>
+                            <Route path={"/technicians"} element={<TechniciansPage/>}/>
+                            <Route path={"/technician/booking"} element={<BookingPage/>}/>
+                        </Routes>
+                    </Stack>
+                </Router>
+            </AppProvider>
         </MantineProvider>
     );
 }

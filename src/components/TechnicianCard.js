@@ -1,9 +1,17 @@
 import React from 'react'
 import {Badge, Button, Card, Group, Stack, Text} from "@mantine/core";
 import {IconCrown} from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import {useBooking} from "../hooks/useBooking";
 
 function TechnicianCard({technician, showBookBtn, isTopRated}) {
+    const navigate = useNavigate();
+    const {setSelectedTechnician} = useBooking();
+
+    const handleBookNow = () => {
+        setSelectedTechnician(technician, isTopRated)
+        navigate('/technician/booking');
+    }
     return (
         <Card shadow="sm" padding="lg" radius={"md"} withBorder>
             <Stack gap="md">
@@ -12,7 +20,7 @@ function TechnicianCard({technician, showBookBtn, isTopRated}) {
                     {isTopRated && (
                         <Badge
                             color="yellow"
-                            leftSection={<IconCrown size={16} />}
+                            leftSection={<IconCrown size={16}/>}
                             size="sm"
                         >
                             Top Rated
@@ -35,11 +43,7 @@ function TechnicianCard({technician, showBookBtn, isTopRated}) {
                 </Stack>
 
                 {showBookBtn &&
-                    <Button
-                        component={Link}
-                        to={"/technician/booking"}
-                        state={{technician: technician, isTopRated: isTopRated}}
-                        fullWidth>
+                    <Button onClick={handleBookNow} fullWidth>
                         Book Now
                     </Button>}
             </Stack>

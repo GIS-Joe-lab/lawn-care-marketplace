@@ -1,28 +1,34 @@
 import React, {useState} from 'react';
 import {Alert, Button, Container, Group, Stack} from '@mantine/core';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
-import {IconArrowLeft, IconInfoCircle, IconCheck} from '@tabler/icons-react'
+import {Link, useNavigate} from 'react-router-dom';
+import {IconArrowLeft, IconInfoCircle, IconCheck, IconAlertCircle} from '@tabler/icons-react'
 import TechnicianCard from "../components/TechnicianCard";
 import BookingForm from "../components/BookingForm";
 import NoTechnician from "../components/NoTechnician";
+import {useBooking} from "../hooks/useBooking";
 
 function BookingPage() {
-
-    const location = useLocation();
     const navigate = useNavigate();
-    const technician = location.state?.technician;
-    const isTopRated = location.state?.isTopRated;
-    const [isOverBooking, setIsOverBooking] = useState(false);
-    const [totalBooking, setTotalBooking] = useState(0);
+
+    const {
+        selectedTechnician,
+        isTopRated,
+        isLoading,
+        error,
+        updateBookingData
+    } = useBooking();
+
     const [bookingSuccess, setBookingSuccess] = useState(false);
 
     const handleBookingSubmit = (formData) => {
-        setTotalBooking(formData.totalHours);
 
-        if(formData.totalHours >= 10) {
-            setIsOverBooking(true)
-        } else {
-            setIsOverBooking(false);
+        updateBookingData({
+            hours: formData.hours,
+            sessions: formData.sessions,
+            selectedTimeSlot: formData.selectedTimeSlot
+        });
+
+        if(formData.totalHours < 10) {
             setBookingSuccess(true);
 
             // Auto Navigate back to technician page after 3 seconds
@@ -32,7 +38,7 @@ function BookingPage() {
         }
     }
 
-    if (!technician )
+    if (!selectedTechnician )
         return (
             <Container size={"md"} py={"xl"}>
                 <Stack gap={"xl"}>
@@ -65,31 +71,39 @@ function BookingPage() {
                             icon={<IconCheck size={16}/>}
                             title="Booking Successful!"
                         >
-                            Your booking has been confirmed. Thank you for choosing our service!
+                            Your booking has been confirmed. Redirecting to technicians page in 3 seconds...
                         </Alert>
                     )}
 
-                    {isOverBooking &&
+                    {isLoading && (
                         <Group>
-                            <Alert icon={<IconInfoCircle size={16}/>} variant="light">
-                                You are booking in total of {totalBooking} hours.
+                            <Alert icon={<IconInfoCircle size={16}/>}>
+                                Please wait while we are processing your booking.
                             </Alert>
                         </Group>
-                    }
+                    )}
+
+                    {error && (
+                        <Group>
+                            <Alert c={"red"} icon={<IconAlertCircle size={16}/>} >
+                                {error}
+                            </Alert>
+                        </Group>
+                    )}
 
                     {/*  Booking Main body  */}
                     {/* Technician information*/}
                     <TechnicianCard
-                        technician = {technician}
+                        technician = {selectedTechnician}
                         showBookBtn = {false}
                         isTopRated = {isTopRated}
                     />
 
                     {/*  Booking Panel  */}
                     <BookingForm
-                        technician = {technician}
+                        technician = {selectedTechnician}
                         onSubmit = {handleBookingSubmit}
-                        />
+                    />
                 </Stack>
             </Container>
         );
