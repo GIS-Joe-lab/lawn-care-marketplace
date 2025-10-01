@@ -31,6 +31,24 @@ A modern React application for finding and booking lawn care technicians. Built 
 4. **Open your browser**
    Navigate to `http://localhost:3000`
 
+## Key Features
+
+### Core Functionality
+- **Browse Technicians**: View 18+ lawn care professionals with ratings and services
+- **Advanced Filtering**: Filter by name, service type, and minimum rating
+- **Book Appointments**: Select hours, sessions, and preferred time slots
+- **Manage Appointments**: Create, edit, and delete bookings
+- **Appointment History**: View all appointments grouped by technician on homepage
+- **Top-Rated Highlighting**: Visual badges for technicians rated ≥4.8
+
+### Technical Implementation
+- **Context API**: Global state management with useReducer
+- **Custom Hooks**: Business logic abstraction (`useAppointment`, `useTechnician`)
+- **React Router v7**: Multi-page navigation with state passing
+- **Mantine UI**: Modern, responsive design components
+- **Performance Optimized**: Memoized computations and efficient filtering
+- **CRUD Operations**: Full appointment lifecycle management
+
 ## Design & Implementation Decisions
 
 ### Component Architecture
@@ -42,12 +60,13 @@ A modern React application for finding and booking lawn care technicians. Built 
 **Rationale**: Follows DRY principles and ensures consistent UI patterns
 
 ### State Management
-**Decision**: Used local component state with `useState` hooks
-- Form state managed within `AppointmentForm` component
-- Filter state managed within `TechniciansPage`
-- Navigation state passed via React Router
+**Decision**: Implemented advanced state management with Context API and useReducer
+- Global state managed through `AppContext` using useReducer pattern
+- Centralized actions for state updates (filters, appointments, technician selection)
+- Custom hooks (`useAppointment`, `useTechnician`) abstract business logic
+- Computed values with `useMemo` for performance optimization
 
-**Rationale**: Simple state requirements don't warrant complex state management solutions
+**Rationale**: Provides scalable architecture for shared state across components while maintaining clean separation of concerns
 
 ### Data Structure
 **Decision**: Mock data stored in separate constants files
@@ -58,11 +77,6 @@ A modern React application for finding and booking lawn care technicians. Built 
 **Rationale**: Separates data from components, making it easy to replace with API calls later
 
 ### UI/UX Decisions
-**Decision**: Implemented responsive grid system with Mantine
-- Mobile: Single column layout
-- Tablet: Two-column grid  
-- Desktop: Three-column grid
-
 **Decision**: Added interactive filtering with real-time updates
 - Search by name with `toLowerCase()` normalization
 - Service filtering with dynamic dropdown
@@ -87,18 +101,27 @@ A modern React application for finding and booking lawn care technicians. Built 
 ```
 src/
 ├── components/
-│   ├── TechnicianCard.js      # Reusable technician display card
-│   ├── AppointmentForm.js         # Booking form with validation
-│   ├── AppointmentSummary.js      # Real-time booking summary
-│   └── NoTechnician.js        # Empty state component
+│   ├── TechnicianCard.js              # Reusable technician display card
+│   ├── AppointmentForm.js             # Booking form with validation
+│   ├── AppointmentSummary.js          # Real-time booking summary
+│   ├── AppointmentCard.js             # Individual appointment display
+│   ├── AppointmentControlPanel.js     # Form inputs for booking
+│   ├── TechnicianAppointmentCard.js   # Technician with appointments
+│   ├── TechnicianAppointmentsGrid.js  # Grid of grouped appointments
+│   └── NoTechnician.js                # Empty state component
 ├── pages/
-│   ├── HomePage.js            # Landing page
-│   ├── TechniciansPage.js     # Technician listing and filtering
-│   └── AppointmentPage.js         # Booking interface
+│   ├── HomePage.js                    # Landing page with appointment history
+│   ├── TechniciansPage.js             # Technician listing and filtering
+│   └── AppointmentPage.js             # Booking/editing interface
+├── context/
+│   └── AppContext.js                  # Global state with Context API + useReducer
+├── hooks/
+│   ├── useAppointment.js              # Custom hook for appointment logic
+│   └── useTechnician.js               # Custom hook for technician filtering
 ├── constants/
-│   ├── technicians.js         # Mock technician data
-│   └── timeSlots.js           # Available time slot options
-└── App.js                     # Main application component
+│   ├── technicians.js                 # Mock technician data
+│   └── timeSlots.js                   # Available time slot options
+└── App.js                             # Main application component with providers
 ```
 
 ## Tech Stack
@@ -109,102 +132,50 @@ src/
 - **Icons**: Tabler Icons 3.35.0
 - **Build Tool**: Create React App
 
-## UI Features
-
-- **Responsive Grid**: Adapts to different screen sizes
-- **Interactive Sliders**: Smooth rating filtering
-- **Real-time Search**: Instant results as you type
-- **Conditional Rendering**: Dynamic UI based on state
-- **Loading States**: Smooth user feedback
-- **Error Handling**: Graceful error states
-
-## Responsive Design
-
-- **Mobile**: Single column layout
-- **Tablet**: Two-column grid
-- **Desktop**: Three-column grid
-- **Large Screens**: Optimized spacing and layout
-
-## Performance Features
-
-- **Component Reusability**: DRY principle implementation
-- **Efficient Filtering**: Optimized search algorithms
-- **State Management**: Clean React state patterns
-- **Memory Optimization**: Proper component lifecycle
-
 ## Bonus Features & Advanced Patterns
 
 ### Advanced React Patterns Implemented
 
-**1. Component Composition**
-- Extracted `AppointmentSummary` as a separate component for better separation of concerns
-- Used props drilling effectively for data flow between parent and child components
+**1. Context API + useReducer**
+- Centralized state management with `AppContext`
+- Action-based state updates following Redux patterns
+- Predictable state flow with reducer functions
+- Type-safe actions with `ACTIONS` constants
 
-**2. Conditional Rendering Patterns**
-- Implemented multiple conditional rendering strategies:
-  - `&&` operator for top-rated badges
-  - Ternary operator for technician list vs. empty state
-  - Early returns for error states
+**2. Custom Hooks**
+- `useAppointment`: Encapsulates appointment CRUD operations
+- `useTechnician`: Manages filtering and technician data
+- Business logic separation from UI components
+- Computed values with `useMemo` for performance
 
-**3. Dynamic Data Processing**
+**3. Component Composition**
+- Highly reusable components (`TechnicianCard`, `AppointmentCard`)
+- Composite components (`TechnicianAppointmentsGrid`)
+- Props-based composition for flexibility
+- Separation of concerns between container and presentational components
+
+**4. Advanced State Management**
+- Global state for appointments and filters
+- Local state for UI-specific concerns
+- State synchronization across routes
+- Optimistic updates with reducer pattern
+
+**5. Dynamic Data Processing**
 - Dynamic service extraction using `Set`, `flatMap`, and `sort`
 - Computed values for filtering and validation
 - Real-time calculations for booking summaries
+- Memoized filtered results for performance
 
-**4. State Management Patterns**
-- Local state with `useState` hooks
-- Computed state values (derived from other state)
-- State reset functionality for form clearing
+**6. Appointment Management**
+- Create, Read, Update, Delete (CRUD) operations
+- Edit existing appointments with pre-populated data
+- Delete with confirmation dialog (`window.confirm`)
+- Appointment history grouped by technician
 
-**5. Event Handling Patterns**
+**7. Event Handling Patterns**
 - Controlled components with `onChange` handlers
 - Form submission with validation
 - Navigation state passing via React Router
-
-### Performance Optimizations
-
-**1. Efficient Filtering**
-- Single-pass filtering algorithm
-- Optimized search with `toLowerCase()` normalization
-- Dynamic service list generation
-
-**2. Component Reusability**
-- `TechnicianCard` used in multiple contexts
-- `NoTechnician` handles different empty states
-- Consistent prop interfaces across components
-
-**3. User Experience Enhancements**
-- Real-time form validation
-- Automatic navigation with user feedback
-- Responsive design with Mantine's grid system
-- Loading states and error handling
-
-### Code Quality Features
-
-**1. Clean Architecture**
-- Separation of concerns (components, pages, constants)
-- Single responsibility principle
-- DRY (Don't Repeat Yourself) implementation
-
-**2. Maintainable Code**
-- Clear component naming conventions
-- Consistent file structure
-- Well-documented prop interfaces
-
-**3. Error Handling**
-- Graceful empty states
-- Form validation with user feedback
-- Navigation error handling
-
-## Future Enhancements
-
-- [ ] User authentication system
-- [ ] Real-time booking notifications
-- [ ] Payment integration
-- [ ] Technician reviews and ratings
-- [ ] Calendar integration
-- [ ] Email notifications
-- [ ] Admin dashboard
-- [ ] Mobile app version
+- Confirmation dialogs for destructive actions
 
 ---
