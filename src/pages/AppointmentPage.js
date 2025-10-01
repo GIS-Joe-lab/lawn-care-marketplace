@@ -69,7 +69,7 @@ function AppointmentPage() {
     }
 
     const handleAppointmentCancel =() => {
-        if(window.confirm('Are you sure you want to cacnel this appointment?')) {
+        if(window.confirm('Are you sure you want to cancel this appointment?')) {
             deleteBookedAppointment(appointmentData.id);
             clearAllAppointmentSelection();
         }
