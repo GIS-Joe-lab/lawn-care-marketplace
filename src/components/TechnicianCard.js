@@ -2,15 +2,15 @@ import React from 'react'
 import {Badge, Button, Card, Group, Stack, Text} from "@mantine/core";
 import {IconCrown} from '@tabler/icons-react';
 import {useNavigate} from 'react-router-dom';
-import {useBooking} from "../hooks/useBooking";
+import {useAppointment} from "../hooks/useAppointment";
 
 function TechnicianCard({technician, showBookBtn, isTopRated, appointments}) {
     const navigate = useNavigate();
-    const {setSelectedTechnician} = useBooking();
+    const {setSelectedTechnician} = useAppointment();
 
     const handleBookNow = () => {
         setSelectedTechnician(technician, isTopRated)
-        navigate('/technician/booking');
+        navigate('/technician/appointment');
     }
     return (
         <Card shadow="sm" padding="lg" radius="md" withBorder>

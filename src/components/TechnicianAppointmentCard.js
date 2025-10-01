@@ -1,4 +1,4 @@
-import {Badge, Card, Group, Stack, Text} from "@mantine/core";
+import {Card, Stack} from "@mantine/core";
 import AppointmentCard from "./AppointmentCard";
 import TechnicianCard from "./TechnicianCard";
 
@@ -23,9 +23,6 @@ function TechnicianAppointmentCard ({technician, isTopRated, appointments}) {
                     showBookBtn={false}
                     isTopRated={isTopRated}
                     appointments={appointments}
-                    style={{
-
-                    }}
                 />
 
                 {/* Appointment Cards */}

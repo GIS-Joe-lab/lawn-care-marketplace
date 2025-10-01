@@ -3,79 +3,84 @@ import {Alert, Button, Container, Group, Stack} from '@mantine/core';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {IconArrowLeft, IconInfoCircle, IconCheck, IconAlertCircle} from '@tabler/icons-react'
 import TechnicianCard from "../components/TechnicianCard";
-import BookingForm from "../components/BookingForm";
+import AppointmentForm from "../components/AppointmentForm";
 import NoTechnician from "../components/NoTechnician";
-import {useBooking} from "../hooks/useBooking";
+import {useAppointment} from "../hooks/useAppointment";
 
-function BookingPage() {
+function AppointmentPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
     const {
-        selectedTechnician: contextTechnician,
-        isTopRated: contextIsTopRated,
+        appointmentData,
+        selectedTechnician,
+        isTopRated,
         isLoading,
         error,
-        updateBookingData,
-        resetBooking,
-        saveBookedAppointment,
-        updateBookedAppointment
-    } = useBooking();
+        updateAppointmentData,
+        resetAppointmentSelectionValue,
+        saveNewAppointment,
+        updateBookedAppointment,
+        deleteBookedAppointment
+    } = useAppointment();
 
     const [bookingSuccess, setBookingSuccess] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [editingAppointment, setEditingAppointment] = useState(null);
 
     // Check if we're editing an existing appointment
     useEffect(() => {
-        if (location.state?.isEditing && location.state?.editingAppointment) {
-            setIsEditing(true);
-            setEditingAppointment(location.state.editingAppointment);
+        if (location.state?.isEditing && location.state?.appointment) {
+            setIsEditing(location.state?.isEditing);
             
-            // Pre-populate booking data with existing appointment
-            updateBookingData({
-                hours: location.state.editingAppointment.hours,
-                sessions: location.state.editingAppointment.sessions,
-                selectedTimeSlot: location.state.editingAppointment.selectedTimeSlot
+            // Pre-populate appointment data with existing appointment
+            updateAppointmentData({
+                id: location.state.appointment.id,
+                hours: location.state.appointment.hours,
+                sessions: location.state.appointment.sessions,
+                selectedTimeSlot: location.state.appointment.selectedTimeSlot
             });
         }
-    }, [location.state, updateBookingData]);
+    }, [location.state, updateAppointmentData]);
 
-    // Get technician from either Context or location state
-    const technician = contextTechnician || location.state?.technician || location.state?.editingAppointment?.technician;
-    const technicianIsTopRated = contextIsTopRated || location.state?.isTopRated || location.state?.editingAppointment?.isTopRated;
+    const handleAppointmentSubmit = () => {
+        // Calculate totalHours from current appointmentData
+        const totalHours = (appointmentData.hours || 0) * (appointmentData.sessions || 0);
 
-    const handleBookingSubmit = (formData) => {
-        updateBookingData({
-            hours: formData.hours,
-            sessions: formData.sessions,
-            selectedTimeSlot: formData.selectedTimeSlot
-        });
-
-        if (isEditing && editingAppointment) {
+        if (isEditing) {
             // Update existing appointment
-            updateBookedAppointment(editingAppointment.id, {
-                hours: formData.hours,
-                sessions: formData.sessions,
-                selectedTimeSlot: formData.selectedTimeSlot,
-                totalHours: formData.totalHours,
-                status: 'confirmed' // Reset to confirmed when updated
+            updateBookedAppointment(appointmentData.id, {
+                hours: appointmentData.hours,
+                sessions: appointmentData.sessions,
+                selectedTimeSlot: appointmentData.selectedTimeSlot,
+                totalHours
             });
         } else {
-            // Create new appointment
-            saveBookedAppointment(formData);
+            // Create new appointment with totalHours
+            saveNewAppointment({
+                ...appointmentData,
+                totalHours
+            });
         }
 
         setBookingSuccess(true);
 
         // Auto Navigate back to home page after 3 seconds
-        setTimeout(() => {
-            resetBooking();
-            navigate('/');
-        }, 3000)
+        setTimeout(() => clearAllAppointmentSelection(), 3000)
     }
 
-    if (!technician) {
+    const handleAppointmentCancel =() => {
+        if(window.confirm('Are you sure you want to cacnel this appointment?')) {
+            deleteBookedAppointment(appointmentData.id);
+            clearAllAppointmentSelection();
+        }
+    }
+
+    const clearAllAppointmentSelection = ()=>{
+        resetAppointmentSelectionValue()
+        navigate('/');
+    }
+
+    if (!selectedTechnician) {
         return (
             <Container size={"md"} py={"xl"}>
                 <Stack gap={"xl"}>
@@ -97,7 +102,7 @@ function BookingPage() {
                             to="/"
                             variant="outline"
                             leftSection={<IconArrowLeft size={16} />}
-                            onClick={() => resetBooking()}
+                            onClick={() => resetAppointmentSelectionValue()}
                         >
                             Back to Home
                         </Button>
@@ -136,15 +141,16 @@ function BookingPage() {
 
                     {/* Technician Information */}
                     <TechnicianCard
-                        technician = {technician}
+                        technician = {selectedTechnician}
                         showBookBtn = {false}
-                        isTopRated = {technicianIsTopRated}
+                        isTopRated = {isTopRated}
                     />
 
-                    {/* Booking Form */}
-                    <BookingForm
-                        technician = {technician}
-                        onSubmit = {handleBookingSubmit}
+                    {/* Appointment Form */}
+                    <AppointmentForm
+                        technician = {selectedTechnician}
+                        onSubmit = {handleAppointmentSubmit}
+                        onCancel={handleAppointmentCancel}
                         isEditing={isEditing}
                     />
                 </Stack>
@@ -153,4 +159,4 @@ function BookingPage() {
     }
 }
 
-export default BookingPage;
+export default AppointmentPage;

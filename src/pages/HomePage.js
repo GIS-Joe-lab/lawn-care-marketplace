@@ -1,12 +1,12 @@
 import React from 'react';
-import {Container, Grid, Title, Stack, Button, Group} from "@mantine/core";
+import {Container, Title, Stack, Button, Group} from "@mantine/core";
 import {IconArrowRight} from '@tabler/icons-react';
 import {Link} from 'react-router-dom';
 import TechnicianAppointmentsGrid from '../components/TechnicianAppointmentsGrid';
-import {useBooking} from '../hooks/useBooking';
+import {useAppointment} from '../hooks/useAppointment';
 
 function HomePage() {
-    const {bookedAppointments} = useBooking();
+    const {bookedAppointments} = useAppointment();
 
     return (
         <Container size="xl" py="xl">

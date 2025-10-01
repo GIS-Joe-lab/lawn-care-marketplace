@@ -7,7 +7,7 @@ import './App.css';
 // Import pages
 import HomePage from "./pages/HomePage";
 import TechniciansPage from "./pages/TechniciansPage";
-import BookingPage from "./pages/BookingPage";
+import AppointmentPage from "./pages/AppointmentPage";
 
 // Import Mantine styles
 import '@mantine/core/styles.css';
@@ -25,7 +25,7 @@ function App() {
                         <Routes>
                             <Route path={"/"} element={<HomePage/>}/>
                             <Route path={"/technicians"} element={<TechniciansPage/>}/>
-                            <Route path={"/technician/booking"} element={<BookingPage/>}/>
+                            <Route path={"/technician/appointment"} element={<AppointmentPage/>}/>
                         </Routes>
                     </Stack>
                 </Router>

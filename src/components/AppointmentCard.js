@@ -2,22 +2,22 @@ import React from 'react';
 import {Card, Group, Stack, Text} from "@mantine/core";
 import {IconClock, IconUser, IconCalendar} from '@tabler/icons-react'
 import { TIME_SLOTS } from '../constants/timeSlots';
-import {useBooking} from "../hooks/useBooking";
+import {useAppointment} from "../hooks/useAppointment";
 import { useNavigate } from 'react-router-dom';
 
 function AppointmentCard ({appointments}) {
 
     const navigate = useNavigate();
-    const { setSelectedTechnician } = useBooking();
+    const { setSelectedTechnician } = useAppointment();
 
     const handleEditAppointment = (appointment) => {
 
         setSelectedTechnician(appointment.technician, appointment.isTopRated);
 
-        // Navigate to booking page with existing data
-        navigate('/technician/booking', {
+        // Navigate to Appointment page with existing data
+        navigate('/technician/appointment', {
             state: {
-                editingAppointment: appointment,
+                appointment: appointment,
                 isEditing: true
             }
         });
@@ -50,7 +50,7 @@ function AppointmentCard ({appointments}) {
                 >
                     {appointments.map((appointment) => (
                         <Card
-                            key={appointment.id}
+                            key={appointment.id || `appointment-${appointment.technician.id}-${appointment.appointmentDate}`}
                             shadow="sm"
                             padding="md"
                             radius="md"
@@ -74,9 +74,12 @@ function AppointmentCard ({appointments}) {
                         >
                             <Stack gap="sm">
                                 {/* Appointment ID */}
-                                <Text size="xs" c="dimmed">
-                                    Appointment #{appointment.id}
-                                </Text>
+                                {appointment.id && (
+                                    <Text size="xs" c="dimmed">
+                                        Appointment #{appointment.id}
+                                    </Text>
+                                )}
+
 
                                 {/* Appointment Details */}
                                 <Stack gap="xs">
@@ -102,9 +105,9 @@ function AppointmentCard ({appointments}) {
                                     </Group>
                                 </Stack>
 
-                                {/* Booking Date */}
+                                {/* Appointment Date */}
                                 <Text size="xs" c="dimmed">
-                                    Booked: {formatDate(appointment.bookingDate)}
+                                    Booked: {formatDate(appointment.appointmentDate)}
                                 </Text>
                             </Stack>
                         </Card>

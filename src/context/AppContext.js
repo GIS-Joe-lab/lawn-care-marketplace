@@ -7,10 +7,11 @@ const initialState = {
     selectedService: '',
     selectedMinRating: 0,
 
-    // Booking state
+    // Appointment state
     selectedTechnician: null,
     isTopRated: false,
-    bookingData: {
+    appointmentData: {
+        id: null,
         hours: null,
         sessions: null,
         selectedTimeSlot: null,
@@ -30,16 +31,15 @@ export const ACTIONS = {
     SET_SELECTED_MIN_RATING: 'SET_SELECTED_MIN_RATING',
     RESET_FILTERS: 'RESET_FILTERS',
 
-    // Booking actions
+    // APPOINTMENT actions
     SET_SELECTED_TECHNICIAN: 'SET_SELECTED_TECHNICIAN',
-    UPDATE_BOOKING_DATA: 'UPDATE_BOOKING_DATA',
-    RESET_BOOKING: 'RESET_BOOKING',
+    UPDATE_APPOINTMENT_DATA: 'UPDATE_APPOINTMENT_DATA',
+    RESET_APPOINTMENT: 'RESET_APPOINTMENT',
 
     // Actions for booked appointment
     ADD_BOOKED_APPOINTMENT: 'ADD_BOOKED_APPOINTMENT',
     UPDATE_BOOKED_APPOINTMENT: 'UPDATE_BOOKED_APPOINTMENT',
     DELETE_BOOKED_APPOINTMENT: 'DELETE_BOOKED_APPOINTMENT',
-    CLEAR_BOOKED_APPOINTMENTS: 'CLEAR_BOOKED_APPOINTMENTS',
 
     SET_LOADING: 'SET_LOADING',
     SET_ERROR: 'SET_ERROR',
@@ -71,10 +71,10 @@ function appReducer(state, action) {
                 isTopRated: action.payload.isTopRated
             };
 
-        case ACTIONS.UPDATE_BOOKING_DATA:
+        case ACTIONS.UPDATE_APPOINTMENT_DATA:
             return {
                 ...state,
-                bookingData: {...state.bookingData, ...action.payload}
+                appointmentData: {...state.appointmentData, ...action.payload}
             };
 
         case ACTIONS.SET_LOADING:
@@ -101,23 +101,18 @@ function appReducer(state, action) {
                     appointment => appointment.id !== action.payload
                 )};
 
-        case ACTIONS.RESET_BOOKING:
+        case ACTIONS.RESET_APPOINTMENT:
             return {
                 ...state,
                 selectedTechnician: null,
                 isTopRated: false,
-                bookingData: {
+                appointmentData: {
+                    id:null,
                     hours: null,
                     sessions: null,
                     selectedTimeSlot: null,
                     totalHours: 0
                 }
-            };
-
-        case ACTIONS.CLEAR_BOOKED_APPOINTMENTS:
-            return {
-                ...state,
-                bookedAppointments: []
             };
 
         default:

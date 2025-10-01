@@ -1,30 +1,32 @@
 import React from 'react';
 import {Divider, Group, Paper, Stack, Text} from "@mantine/core";
 import {TIME_SLOTS} from "../constants/timeSlots";
+import {useAppointment} from "../hooks/useAppointment";
 
-function BookingSummary ({technicianName, selectedTimeSlot, hours, sessions}) {
+function AppointmentSummary () {
 
-    const totalHours = hours * sessions;
+    const {appointmentData, selectedTechnician} = useAppointment();
+    const totalHours = appointmentData.hours * appointmentData.sessions;
 
     return (
         <Paper>
             <Stack gap={"sm"}>
-                <Text fw={700} size={"md"}>Booking Summary</Text>
+                <Text fw={700} size={"md"}>Appointment Summary</Text>
                 <Group justify="space-between">
                     <Text size={"sm"} fw={500}>Technician:</Text>
-                    <Text size={"sm"} fw={600}>{technicianName}</Text>
+                    <Text size={"sm"} fw={600}>{selectedTechnician.name}</Text>
                 </Group>
                 <Group justify="space-between">
                     <Text size={"sm"} fw={500}>Prefer Time Slot:</Text>
-                    <Text size={"sm"}>{TIME_SLOTS.find(slot => slot.value === selectedTimeSlot)?.label}</Text>
+                    <Text size={"sm"}>{TIME_SLOTS.find(slot => slot.value === appointmentData.selectedTimeSlot)?.label}</Text>
                 </Group>
                 <Group justify="space-between">
                     <Text size={"sm"} fw={500}>Hours per session:</Text>
-                    <Text size={"sm"}>{hours}</Text>
+                    <Text size={"sm"}>{appointmentData.hours}</Text>
                 </Group>
                 <Group justify="space-between">
                     <Text size={"sm"} fw={500}>Number of session:</Text>
-                    <Text size={"sm"}>{sessions}</Text>
+                    <Text size={"sm"}>{appointmentData.sessions}</Text>
                 </Group>
                 <Divider/>
                 <Group justify="space-between">
@@ -36,4 +38,4 @@ function BookingSummary ({technicianName, selectedTimeSlot, hours, sessions}) {
     );
 }
 
-export default BookingSummary;
+export default AppointmentSummary;

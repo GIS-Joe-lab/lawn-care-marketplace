@@ -37,13 +37,13 @@ A modern React application for finding and booking lawn care technicians. Built 
 **Decision**: Created reusable components for consistency and maintainability
 - `TechnicianCard`: Used in both listing and booking pages
 - `NoTechnician`: Handles empty states across multiple pages
-- `BookingSummary`: Extracted for real-time updates
+- `AppointmentSummary`: Extracted for real-time updates
 
 **Rationale**: Follows DRY principles and ensures consistent UI patterns
 
 ### State Management
 **Decision**: Used local component state with `useState` hooks
-- Form state managed within `BookingForm` component
+- Form state managed within `AppointmentForm` component
 - Filter state managed within `TechniciansPage`
 - Navigation state passed via React Router
 
@@ -88,13 +88,13 @@ A modern React application for finding and booking lawn care technicians. Built 
 src/
 ├── components/
 │   ├── TechnicianCard.js      # Reusable technician display card
-│   ├── BookingForm.js         # Booking form with validation
-│   ├── BookingSummary.js      # Real-time booking summary
+│   ├── AppointmentForm.js         # Booking form with validation
+│   ├── AppointmentSummary.js      # Real-time booking summary
 │   └── NoTechnician.js        # Empty state component
 ├── pages/
 │   ├── HomePage.js            # Landing page
 │   ├── TechniciansPage.js     # Technician listing and filtering
-│   └── BookingPage.js         # Booking interface
+│   └── AppointmentPage.js         # Booking interface
 ├── constants/
 │   ├── technicians.js         # Mock technician data
 │   └── timeSlots.js           # Available time slot options
@@ -137,7 +137,7 @@ src/
 ### Advanced React Patterns Implemented
 
 **1. Component Composition**
-- Extracted `BookingSummary` as a separate component for better separation of concerns
+- Extracted `AppointmentSummary` as a separate component for better separation of concerns
 - Used props drilling effectively for data flow between parent and child components
 
 **2. Conditional Rendering Patterns**
