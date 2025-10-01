@@ -2,7 +2,7 @@ import React from 'react';
 import {Container, Title, Stack, Button, Group} from "@mantine/core";
 import {IconArrowRight} from '@tabler/icons-react';
 import {Link} from 'react-router-dom';
-import TechnicianAppointmentsGrid from '../components/TechnicianAppointmentsGrid';
+import TechnicianAppointmentsGrid from '../components/layouts/TechnicianAppointmentsGrid';
 import {useAppointment} from '../hooks/useAppointment';
 
 function HomePage() {

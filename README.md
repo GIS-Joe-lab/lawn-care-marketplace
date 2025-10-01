@@ -34,12 +34,12 @@ A modern React application for finding and booking lawn care technicians. Built 
 ## Key Features
 
 ### Core Functionality
-- **Browse Technicians**: View 18+ lawn care professionals with ratings and services
+- **Browse Technicians**: View lawn care professionals with ratings and services
 - **Advanced Filtering**: Filter by name, service type, and minimum rating
 - **Book Appointments**: Select hours, sessions, and preferred time slots
 - **Manage Appointments**: Create, edit, and delete bookings
 - **Appointment History**: View all appointments grouped by technician on homepage
-- **Top-Rated Highlighting**: Visual badges for technicians rated ≥4.8
+- **Top-Rated Highlighting**: Visual badges for technicians rated ≥ 4.8
 
 ### Technical Implementation
 - **Context API**: Global state management with useReducer
@@ -91,10 +91,6 @@ A modern React application for finding and booking lawn care technicians. Built 
 - All form fields required before submission
 - Number inputs with min/max constraints
 - Real-time summary updates
-
-**Decision**: Automatic navigation after successful booking
-- 3-second delay with `setTimeout()`
-- Provides user feedback before redirect
 
 ## Project Structure
 

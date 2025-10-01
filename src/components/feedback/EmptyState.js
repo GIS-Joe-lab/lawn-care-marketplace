@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import {IconArrowLeft} from "@tabler/icons-react";
 
 
-function NoTechnician ({title, message, showBackButton}) {
+function EmptyState ({title, message, showBackButton}) {
     return (
         <Paper p="xl" ta="center" withBorder radius={"md"}>
             <Stack gap="md">
@@ -17,11 +17,11 @@ function NoTechnician ({title, message, showBackButton}) {
                     variant="outline"
                     leftSection={<IconArrowLeft size={16} />}
                 >
-                    Back to Technicians
+                    Back to Technicians Page
                 </Button>)}
             </Stack>
         </Paper>
     );
 }
 
-export default NoTechnician;
+export default EmptyState;

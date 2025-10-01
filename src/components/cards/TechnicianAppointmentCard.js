@@ -11,11 +11,7 @@ function TechnicianAppointmentCard ({technician, isTopRated, appointments}) {
             padding="md" 
             radius="md" 
             withBorder
-            style={{ 
-                minWidth: '300px',
-                maxWidth: '500px',
-                flex: '1 1 300px'
-            }}
+            className="technician-card"
         >
             <Stack gap="md">
                 <TechnicianCard

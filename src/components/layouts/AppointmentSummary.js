@@ -1,7 +1,7 @@
 import React from 'react';
 import {Divider, Group, Paper, Stack, Text} from "@mantine/core";
-import {TIME_SLOTS} from "../constants/timeSlots";
-import {useAppointment} from "../hooks/useAppointment";
+import {TIME_SLOTS} from "../../constants/timeSlots";
+import {useAppointment} from "../../hooks/useAppointment";
 
 function AppointmentSummary () {
 

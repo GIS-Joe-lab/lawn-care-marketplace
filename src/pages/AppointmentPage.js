@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 import {Alert, Button, Container, Group, Stack} from '@mantine/core';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {IconArrowLeft, IconInfoCircle, IconCheck, IconAlertCircle} from '@tabler/icons-react'
-import TechnicianCard from "../components/TechnicianCard";
-import AppointmentForm from "../components/AppointmentForm";
-import NoTechnician from "../components/NoTechnician";
+import TechnicianCard from "../components/cards/TechnicianCard";
+import AppointmentForm from "../components/forms/AppointmentForm";
+import NoTechnician from "../components/feedback/EmptyState";
 import {useAppointment} from "../hooks/useAppointment";
 
 function AppointmentPage() {
@@ -63,21 +63,14 @@ function AppointmentPage() {
         }
 
         setBookingSuccess(true);
-
-        // Auto Navigate back to home page after 3 seconds
-        setTimeout(() => clearAllAppointmentSelection(), 3000)
     }
 
     const handleAppointmentCancel =() => {
         if(window.confirm('Are you sure you want to cancel this appointment?')) {
             deleteBookedAppointment(appointmentData.id);
-            clearAllAppointmentSelection();
+            resetAppointmentSelectionValue()
+            navigate('/');
         }
-    }
-
-    const clearAllAppointmentSelection = ()=>{
-        resetAppointmentSelectionValue()
-        navigate('/');
     }
 
     if (!selectedTechnician) {
@@ -118,7 +111,7 @@ function AppointmentPage() {
                             {isEditing ? 
                                 "Your appointment has been updated successfully!" : 
                                 "Your booking has been confirmed. Thank you for choosing our service!"
-                            } Redirecting to home page in 3 seconds...
+                            }
                         </Alert>
                     )}
 

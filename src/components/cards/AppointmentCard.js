@@ -1,8 +1,8 @@
 import React from 'react';
 import {Card, Group, Stack, Text} from "@mantine/core";
 import {IconClock, IconUser, IconCalendar} from '@tabler/icons-react'
-import { TIME_SLOTS } from '../constants/timeSlots';
-import {useAppointment} from "../hooks/useAppointment";
+import { TIME_SLOTS } from '../../constants/timeSlots';
+import {useAppointment} from "../../hooks/useAppointment";
 import { useNavigate } from 'react-router-dom';
 
 function AppointmentCard ({appointments}) {
@@ -44,32 +44,16 @@ function AppointmentCard ({appointments}) {
                     align="flex-start" 
                     gap="md" 
                     wrap="wrap"
-                    style={{
-                        maxWidth: '100%'
-                    }}
+                    className="appointmentsGroupCards"
                 >
                     {appointments.map((appointment) => (
                         <Card
-                            key={appointment.id || `appointment-${appointment.technician.id}-${appointment.appointmentDate}`}
+                            key={appointment.id}
                             shadow="sm"
-                            padding="md"
+                            padding="lg"
                             radius="md"
                             withBorder
-                            style={{
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease',
-                                minWidth: '200px',
-                                maxWidth: '300px',
-                                flex: '1 1 200px'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12)';
-                            }}
+                            className="appointmentCard"
                             onClick={() => handleEditAppointment(appointment)}
                         >
                             <Stack gap="sm">
@@ -79,7 +63,6 @@ function AppointmentCard ({appointments}) {
                                         Appointment #{appointment.id}
                                     </Text>
                                 )}
-
 
                                 {/* Appointment Details */}
                                 <Stack gap="xs">
@@ -114,7 +97,7 @@ function AppointmentCard ({appointments}) {
                     ))}
                 </Group>
             ) : (
-                <div style={{ padding: '20px', textAlign: 'center', backgroundColor: '#f9f9f9', borderRadius: '4px' }}>
+                <div className="noAppointment">
                     <Text c="dimmed">No appointments found for this technician</Text>
                 </div>
             )}

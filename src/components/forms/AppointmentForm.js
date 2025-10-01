@@ -1,9 +1,9 @@
 import React from 'react';
 import {Alert, Button, Card, Divider, Stack} from "@mantine/core";
 import {IconCalendar, IconCancel} from "@tabler/icons-react";
-import AppointmentSummary from "./AppointmentSummary";
+import AppointmentSummary from "../layouts/AppointmentSummary";
 import AppointmentControlPanel from "./AppointmentControlPanel";
-import {useAppointment} from "../hooks/useAppointment";
+import {useAppointment} from "../../hooks/useAppointment";
 
 function AppointmentForm({onSubmit, onCancel, isEditing = false}) {
 
@@ -24,6 +24,7 @@ function AppointmentForm({onSubmit, onCancel, isEditing = false}) {
                     </Alert>
                 )}
 
+                {/* Appointment Control Panel*/}
                 <AppointmentControlPanel/>
                 <Divider/>
 

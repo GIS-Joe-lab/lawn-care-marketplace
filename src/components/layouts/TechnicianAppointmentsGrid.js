@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Card, Group, Stack, Text, Title} from '@mantine/core';
-import TechnicianAppointmentCard from "./TechnicianAppointmentCard";
+import TechnicianAppointmentCard from "../cards/TechnicianAppointmentCard";
 
 function TechnicianAppointmentsGrid({bookedAppointments}) {
 

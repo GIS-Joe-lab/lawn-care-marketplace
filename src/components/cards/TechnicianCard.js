@@ -2,7 +2,7 @@ import React from 'react'
 import {Badge, Button, Card, Group, Stack, Text} from "@mantine/core";
 import {IconCrown} from '@tabler/icons-react';
 import {useNavigate} from 'react-router-dom';
-import {useAppointment} from "../hooks/useAppointment";
+import {useAppointment} from "../../hooks/useAppointment";
 
 function TechnicianCard({technician, showBookBtn, isTopRated, appointments}) {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ function TechnicianCard({technician, showBookBtn, isTopRated, appointments}) {
     return (
         <Card shadow="sm" padding="lg" radius="md" withBorder>
             <Stack gap="md">
-                <Stack style={{ cursor: 'default' }}>
+                <Stack className="onlyPointer">
                     <Group justify="space-between" >
                         <Group gap="md">
                             <Text size="lg" fw="700">{technician.name}</Text>

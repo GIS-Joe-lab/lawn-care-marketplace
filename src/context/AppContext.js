@@ -8,7 +8,12 @@ const initialState = {
     selectedMinRating: 0,
 
     // Appointment state
-    selectedTechnician: null,
+    selectedTechnician: {
+        id: null,
+        name: null,
+        rating: null,
+        services: []
+    },
     isTopRated: false,
     appointmentData: {
         id: null,
@@ -90,16 +95,20 @@ function appReducer(state, action) {
             return {...state, bookedAppointments: [...state.bookedAppointments, action.payload]};
 
         case ACTIONS.UPDATE_BOOKED_APPOINTMENT:
-            return {...state, bookedAppointments: state.bookedAppointments.map(appointment =>
+            return {
+                ...state, bookedAppointments: state.bookedAppointments.map(appointment =>
                     appointment.id === action.payload.id
-                            ? { ...appointment, ...action.payload.updates }
-                            : appointment
-                )};
+                        ? {...appointment, ...action.payload.updates}
+                        : appointment
+                )
+            };
 
         case ACTIONS.DELETE_BOOKED_APPOINTMENT:
-            return {...state, bookedAppointments: state.bookedAppointments.filter(
+            return {
+                ...state, bookedAppointments: state.bookedAppointments.filter(
                     appointment => appointment.id !== action.payload
-                )};
+                )
+            };
 
         case ACTIONS.RESET_APPOINTMENT:
             return {
@@ -107,7 +116,7 @@ function appReducer(state, action) {
                 selectedTechnician: null,
                 isTopRated: false,
                 appointmentData: {
-                    id:null,
+                    id: null,
                     hours: null,
                     sessions: null,
                     selectedTimeSlot: null,

@@ -1,8 +1,8 @@
 import React from "react";
-import {Button, Container, Title, Grid, TextInput, Select, Slider, Stack} from '@mantine/core';
+import {Button, Container, Grid, TextInput, Select, Slider, Stack} from '@mantine/core';
 import {IconHome, IconSearch} from '@tabler/icons-react'
-import TechnicianCard from "../components/TechnicianCard";
-import NoTechnician from "../components/NoTechnician";
+import TechnicianCard from "../components/cards/TechnicianCard";
+import NoTechnician from "../components/feedback/EmptyState";
 import {useTechnician} from "../hooks/useTechnician";
 import {Link} from "react-router-dom";
 
@@ -85,26 +85,28 @@ function TechniciansPage() {
                 </Grid>
 
                 {/*  Technicians Display body section  */}
-                {hasTechnicians ?
-                    // With Technician result
-                    (<Grid>
-                        {filteredTechnicians.map(technician => (
-                            <Grid.Col key={technician.id} span={{base: 12, sm: 6, lg: 4}}>
-                                <TechnicianCard
-                                    technician={technician}
-                                    showBookBtn={true}
-                                    isTopRated={topRatedTechnicians.includes(technician)}
-                                />
-                            </Grid.Col>
-                        ))}
-                    </Grid>) :
-                    // Without Technician result
-                    (<NoTechnician
-                        title="No Technicians Found"
-                        message="Try adjusting your search criteria or filters"
-                        showBackButton={false}
-                    />)
-                }
+                <div className="technicians-grid-container">
+                    {hasTechnicians ?
+                        // With Technician result
+                        (<Grid>
+                            {filteredTechnicians.map(technician => (
+                                <Grid.Col key={technician.id} span={{base: 12, sm: 6, lg: 4}}>
+                                    <TechnicianCard
+                                        technician={technician}
+                                        showBookBtn={true}
+                                        isTopRated={topRatedTechnicians.includes(technician)}
+                                    />
+                                </Grid.Col>
+                            ))}
+                        </Grid>) :
+                        // Without Technician result
+                        (<NoTechnician
+                            title="No Technicians Found"
+                            message="Try adjusting your search criteria or filters"
+                            showBackButton={false}
+                        />)
+                    }
+                </div>
             </Stack>
         </Container>
     );
