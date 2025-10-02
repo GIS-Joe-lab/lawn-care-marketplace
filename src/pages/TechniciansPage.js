@@ -66,6 +66,7 @@ function TechniciansPage() {
                             min={minRating}
                             max={maxRating}
                             step={0.1}
+                            inverted
                             marks={[
                                 {value: minRating, label: minRating.toString()},
                                 {value: maxRating, label: maxRating.toString()}
