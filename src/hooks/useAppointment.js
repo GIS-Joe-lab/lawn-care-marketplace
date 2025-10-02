@@ -34,7 +34,7 @@ export function useAppointment() {
         dispatch({type: ACTIONS.ADD_BOOKED_APPOINTMENT, payload: appointment});
     }, [state.selectedTechnician, state.isTopRated, dispatch]);
 
-    const updateBookedAppointment = useCallback((updates, appointmentId) => {
+    const updateBookedAppointment = useCallback((appointmentId, updates) => {
         dispatch({
             type: ACTIONS.UPDATE_BOOKED_APPOINTMENT,
             payload: { id: appointmentId, updates }
