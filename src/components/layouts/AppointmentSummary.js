@@ -8,6 +8,16 @@ function AppointmentSummary () {
     const {appointmentData, selectedTechnician} = useAppointment();
     const totalHours = appointmentData.hours * appointmentData.sessions;
 
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
     return (
         <Paper>
             <Stack gap={"sm"}>
@@ -15,6 +25,10 @@ function AppointmentSummary () {
                 <Group justify="space-between">
                     <Text size={"sm"} fw={500}>Technician:</Text>
                     <Text size={"sm"} fw={600}>{selectedTechnician.name}</Text>
+                </Group>
+                <Group justify="space-between">
+                    <Text size={"sm"} fw={500}>Prefer Date:</Text>
+                    <Text size={"sm"}>{formatDate(appointmentData.selectedDate)}</Text>
                 </Group>
                 <Group justify="space-between">
                     <Text size={"sm"} fw={500}>Prefer Time Slot:</Text>

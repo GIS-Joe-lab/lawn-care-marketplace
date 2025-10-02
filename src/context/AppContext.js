@@ -20,6 +20,7 @@ const initialState = {
         hours: null,
         sessions: null,
         selectedTimeSlot: null,
+        selectedDate: null,
         totalHours: 0
     },
 
@@ -120,6 +121,7 @@ function appReducer(state, action) {
                     hours: null,
                     sessions: null,
                     selectedTimeSlot: null,
+                    selectedDate: null,
                     totalHours: 0
                 }
             };

@@ -31,6 +31,23 @@
     border-radius: 4px;
 }
 
+/* Appointment Page */
+/* Date Picker Button Styles */
+.date-picker-button {
+    height: 36px;
+    border: 1px solid #ced4da;
+    background-color: white;
+    color: #868e96; /* Default placeholder color */
+}
+
+.date-picker-button.has-date {
+    color: #000; /* Color when date is selected */
+}
+
+.date-picker-button:hover {
+    background-color: #f8f9fa;
+}
+
 /* Technician Card*/
 .technician-card {
     min-width: 300px;

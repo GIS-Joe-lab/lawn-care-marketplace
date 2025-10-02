@@ -37,7 +37,8 @@ function AppointmentPage() {
                 id: location.state.appointment.id,
                 hours: location.state.appointment.hours,
                 sessions: location.state.appointment.sessions,
-                selectedTimeSlot: location.state.appointment.selectedTimeSlot
+                selectedTimeSlot: location.state.appointment.selectedTimeSlot,
+                selectedDate: location.state.appointment.selectedDate
             });
         }
     }, [location.state, updateAppointmentData]);
@@ -52,6 +53,7 @@ function AppointmentPage() {
                 hours: appointmentData.hours,
                 sessions: appointmentData.sessions,
                 selectedTimeSlot: appointmentData.selectedTimeSlot,
+                selectedDate: appointmentData.selectedDate,
                 totalHours
             });
         } else {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Card, Group, Stack, Text} from "@mantine/core";
-import {IconClock, IconUser, IconCalendar} from '@tabler/icons-react'
+import {IconClock,IconUser, IconCalendar, IconTimeline} from '@tabler/icons-react'
 import { TIME_SLOTS } from '../../constants/timeSlots';
 import {useAppointment} from "../../hooks/useAppointment";
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +30,23 @@ function AppointmentCard ({appointments}) {
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit'
+        });
+    };
+
+    const formatSelectedDate = (date) => {
+        if (!date) return 'No date selected';
+        
+        // Ensure we have a proper Date object
+        const dateObj = date instanceof Date ? date : new Date(date);
+        
+        // Check if the date is valid
+        if (isNaN(dateObj.getTime())) return 'Invalid date';
+        
+        return dateObj.toLocaleDateString('en-US', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
         });
     };
 
@@ -67,6 +84,13 @@ function AppointmentCard ({appointments}) {
                                 {/* Appointment Details */}
                                 <Stack gap="xs">
                                     <Group gap="xs">
+                                        <IconCalendar size={16} color="var(--mantine-color-green-6)" />
+                                        <Text size="sm">
+                                            {formatSelectedDate(appointment.selectedDate)}
+                                        </Text>
+                                    </Group>
+
+                                    <Group gap="xs">
                                         <IconClock size={16} color="var(--mantine-color-blue-6)" />
                                         <Text size="sm">
                                             {appointment.hours}h × {appointment.sessions} sessions
@@ -74,7 +98,7 @@ function AppointmentCard ({appointments}) {
                                     </Group>
 
                                     <Group gap="xs">
-                                        <IconCalendar size={16} color="var(--mantine-color-green-6)" />
+                                        <IconTimeline size={16} color="var(--mantine-color-yellow-6)" />
                                         <Text size="sm">
                                             {getTimeSlotLabel(appointment.selectedTimeSlot)}
                                         </Text>

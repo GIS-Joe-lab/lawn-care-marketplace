@@ -12,6 +12,7 @@ import AppointmentPage from "./pages/AppointmentPage";
 // Import Mantine styles
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/dates/styles.css';
 import {AppProvider} from "./context/AppContext";
 
 
